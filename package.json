@@ -1,0 +1,19 @@
+{
+	"name": "incident-io-sync",
+	"version": "1.0.0",
+	"description": "Sync incident.io data to Obsidian daily notes",
+	"main": "main.js",
+	"scripts": {
+		"dev": "node esbuild.config.mjs",
+		"build": "node esbuild.config.mjs production"
+	},
+	"keywords": [],
+	"author": "James Jarvis",
+	"license": "MIT",
+	"devDependencies": {
+		"@types/node": "^16.11.6",
+		"esbuild": "0.17.3",
+		"obsidian": "latest",
+		"typescript": "4.7.4"
+	}
+}
