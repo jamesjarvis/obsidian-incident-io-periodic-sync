@@ -1,11 +1,10 @@
 {
 	"id": "incident-io-sync",
 	"name": "Incident.io Daily Note Sync",
-	"version": "1.0.0",
-	"minAppVersion": "0.15.0",
-	"description": "Sync on-call status and active incidents from incident.io to your daily notes",
+	"version": "1.0.1",
+	"minAppVersion": "1.10.0",
+	"description": "Sync on-call status and active incidents from incident.io to your daily notes.",
 	"author": "James Jarvis",
 	"authorUrl": "https://github.com/jamesjarvis",
-	"fundingUrl": "https://github.com/jamesjarvis",
 	"isDesktopOnly": true
 }
