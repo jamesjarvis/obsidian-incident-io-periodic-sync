@@ -12,7 +12,6 @@ Sync on-call status and incidents from incident.io to Obsidian daily notes.
   - Full timeline with status/severity changes
   - Actions and follow-ups with checkboxes
   - Attachments (GitHub PRs, Datadog dashboards, etc.)
-- Overnight page indicator (😴) for pages between 22:00-07:00
 - Auto-sync at configurable intervals (1/5/10/30/60 min)
 - Historical backfill support (up to 90 days)
 - Wikilinks from daily notes to incident files
@@ -52,10 +51,6 @@ The plugin adds an Incidents section to your daily notes:
 
 ### Active Incidents
 - [[Incidents/INC-123|INC-123: Database outage]]
-
-### Pages
-- 14:32 - INC-123: Database outage (Primary)
-- 😴 03:15 - INC-124: API latency spike (Secondary)
 ```
 
 ## Incident Note Format
@@ -81,7 +76,6 @@ Creates individual files like `Incidents/INC-123.md` with:
 | Incident Notes Folder | Where to create incident files | Incidents |
 | Show On-Call Status | Include on-call status section | true |
 | Show Incidents | Include incidents section | true |
-| Show Pages | Include pages received section | true |
 | Omit Empty Sections | Hide sections when empty | false |
 | Auto-Sync Enabled | Enable background syncing | true |
 | Sync Frequency | How often to auto-sync | 5 minutes |
