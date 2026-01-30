@@ -1,6 +1,6 @@
 {
 	"name": "incident-io-periodic-note-sync",
-	"version": "1.0.3",
+	"version": "1.0.4",
 	"description": "Sync incident.io data to Obsidian daily notes",
 	"main": "main.js",
 	"scripts": {
