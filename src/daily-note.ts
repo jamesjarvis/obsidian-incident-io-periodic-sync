@@ -239,7 +239,7 @@ export class DailyNoteManager {
 	async updateDailyNote(result: SyncResult, date?: Date): Promise<boolean> {
 		try {
 			const targetDate = date || new Date();
-			const dailyNote = await this.getDailyNoteForDate(targetDate);
+			const dailyNote = this.getDailyNoteForDate(targetDate);
 			if (!dailyNote) {
 				logger.debug('No daily note found for target date');
 				return false;
@@ -334,7 +334,7 @@ export class DailyNoteManager {
 
 	async clearIncidentsSection(): Promise<boolean> {
 		try {
-			const dailyNote = await this.getDailyNote();
+			const dailyNote = this.getDailyNote();
 			if (!dailyNote) {
 				return false;
 			}

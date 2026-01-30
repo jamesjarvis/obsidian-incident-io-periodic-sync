@@ -154,7 +154,7 @@ export default class IncidentIOSyncPlugin extends Plugin {
 					// Clear the plaintext key from settings
 					delete this.settings.apiKey;
 					await this.saveData(this.settings);
-					new Notice('incident.io: Migrated API key to secure storage');
+					new Notice('Incident.io: migrated API key to secure storage');
 					logger.info('API key migration complete');
 				} catch (error) {
 					logger.error('Failed to migrate API key to SecretStorage', error);
@@ -278,12 +278,12 @@ export default class IncidentIOSyncPlugin extends Plugin {
 
 	async syncToDaily(): Promise<void> {
 		if (this.isSyncing) {
-			new Notice('incident.io: Sync already in progress');
+			new Notice('Incident.io: sync already in progress');
 			return;
 		}
 
 		if (!this.api) {
-			new Notice('incident.io: API key not configured');
+			new Notice('Incident.io: API key not configured');
 			this.updateStatusBar('error', 'No API key');
 			return;
 		}
@@ -339,7 +339,7 @@ export default class IncidentIOSyncPlugin extends Plugin {
 				new Notice(`incident.io: ${message}`);
 			} else {
 				this.updateStatusBar('error', 'No daily note');
-				new Notice('incident.io: No daily note found for today');
+				new Notice('Incident.io: no daily note found for today');
 			}
 		} catch (error) {
 			const message = error instanceof Error ? error.message : 'Unknown error';
@@ -389,9 +389,9 @@ export default class IncidentIOSyncPlugin extends Plugin {
 
 		const success = await this.dailyNoteManager.clearIncidentsSection();
 		if (success) {
-			new Notice('incident.io: Cleared incidents section');
+			new Notice('Incident.io: cleared incidents section');
 		} else {
-			new Notice('incident.io: No daily note found');
+			new Notice('Incident.io: no daily note found');
 		}
 		return success;
 	}

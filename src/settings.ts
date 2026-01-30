@@ -115,7 +115,7 @@ export class IncidentIOSyncSettingTab extends PluginSettingTab {
 			.setName('User identifier')
 			.setDesc('Email substring or name to match your user (e.g., "james" will match james@company.com)')
 			.addText(text => text
-				.setPlaceholder('james')
+				.setPlaceholder('James')
 				.setValue(this.plugin.settings.userIdentifier)
 				.onChange(async (value) => {
 					this.plugin.settings.userIdentifier = value;
@@ -216,7 +216,7 @@ export class IncidentIOSyncSettingTab extends PluginSettingTab {
 
 		new Setting(containerEl)
 			.setName('Daily notes folder')
-			.setDesc('Path to your daily notes folder (leave empty to auto-detect from Periodic Notes or Daily Notes plugin)')
+			.setDesc('Auto-detects from periodic notes or daily notes plugin if empty')
 			.addText(text => text
 				.setPlaceholder('e.g., Notes/Daily Notes')
 				.setValue(this.plugin.settings.dailyNotesFolder)
@@ -227,9 +227,9 @@ export class IncidentIOSyncSettingTab extends PluginSettingTab {
 
 		new Setting(containerEl)
 			.setName('Section header')
-			.setDesc('The markdown header to use for the incidents section (must start with #)')
+			.setDesc('Markdown header for the incidents section (must start with #)')
 			.addText(text => text
-				.setPlaceholder('## Incidents')
+				.setPlaceholder('## incidents')
 				.setValue(this.plugin.settings.sectionHeader)
 				.onChange(async (value) => {
 					const validated = validateSectionHeader(value);

@@ -5,15 +5,22 @@
 	"main": "main.js",
 	"scripts": {
 		"dev": "node esbuild.config.mjs",
-		"build": "node esbuild.config.mjs production"
+		"build": "node esbuild.config.mjs production",
+		"lint": "eslint ."
 	},
 	"keywords": [],
 	"author": "James Jarvis",
 	"license": "MIT",
 	"devDependencies": {
+		"@eslint/js": "^9.30.0",
 		"@types/node": "^16.11.6",
 		"esbuild": "0.17.3",
+		"eslint": "^9.30.0",
+		"eslint-plugin-obsidianmd": "^0.1.9",
+		"globals": "^14.0.0",
+		"jiti": "^2.6.1",
 		"obsidian": "latest",
-		"typescript": "4.7.4"
+		"typescript": "5.4.5",
+		"typescript-eslint": "^8.35.0"
 	}
 }
