@@ -1,5 +1,5 @@
 import { App, PluginSettingTab, Setting, normalizePath } from 'obsidian';
-import { IncidentIOSyncSettings, SECRET_KEY_API } from './types';
+import { SECRET_KEY_API } from './types';
 import { IncidentIOAPI } from './api';
 import IncidentIOSyncPlugin from './main';
 import { logger } from './logger';
@@ -44,14 +44,12 @@ export class IncidentIOSyncSettingTab extends PluginSettingTab {
 		containerEl.empty();
 		containerEl.addClass('incident-io-settings');
 
-		containerEl.createEl('h2', { text: 'Incident.io Sync Settings' });
-
 		// API Configuration
-		containerEl.createEl('h3', { text: 'API Configuration' });
+		new Setting(containerEl).setName('API configuration').setHeading();
 
 		// API Key - stored in SecretStorage, not data.json
 		const apiKeySetting = new Setting(containerEl)
-			.setName('API Key')
+			.setName('API key')
 			.setDesc('Your incident.io API key (stored securely)');
 
 		// Status indicator
@@ -69,7 +67,7 @@ export class IncidentIOSyncSettingTab extends PluginSettingTab {
 		});
 
 		apiKeySetting.addButton(button => button
-			.setButtonText('Save Key')
+			.setButtonText('Save key')
 			.onClick(async () => {
 				const inputEl = apiKeySetting.controlEl.querySelector('input') as HTMLInputElement;
 				const value = inputEl?.value?.trim();
@@ -98,7 +96,7 @@ export class IncidentIOSyncSettingTab extends PluginSettingTab {
 					apiKeyStatus.className = 'api-key-status error';
 				}
 
-				button.setButtonText('Save Key');
+				button.setButtonText('Save key');
 				button.setDisabled(false);
 			}));
 
@@ -114,7 +112,7 @@ export class IncidentIOSyncSettingTab extends PluginSettingTab {
 			}));
 
 		new Setting(containerEl)
-			.setName('User Identifier')
+			.setName('User identifier')
 			.setDesc('Email substring or name to match your user (e.g., "james" will match james@company.com)')
 			.addText(text => text
 				.setPlaceholder('james')
@@ -126,14 +124,14 @@ export class IncidentIOSyncSettingTab extends PluginSettingTab {
 
 		// Test connection button
 		const testConnectionSetting = new Setting(containerEl)
-			.setName('Test Connection')
+			.setName('Test connection')
 			.setDesc('Verify your API key and user identifier work correctly');
 
 		const resultContainer = containerEl.createDiv('test-connection-result');
 		resultContainer.hide();
 
 		testConnectionSetting.addButton(button => button
-			.setButtonText('Test Connection')
+			.setButtonText('Test connection')
 			.onClick(async () => {
 				button.setButtonText('Testing...');
 				button.setDisabled(true);
@@ -170,15 +168,15 @@ export class IncidentIOSyncSettingTab extends PluginSettingTab {
 				}
 
 				resultContainer.show();
-				button.setButtonText('Test Connection');
+				button.setButtonText('Test connection');
 				button.setDisabled(false);
 			}));
 
 		// Sync Configuration
-		containerEl.createEl('h3', { text: 'Sync Configuration' });
+		new Setting(containerEl).setName('Sync configuration').setHeading();
 
 		new Setting(containerEl)
-			.setName('Incident Notes Folder')
+			.setName('Incident notes folder')
 			.setDesc('Folder where separate incident note files will be created')
 			.addText(text => text
 				.setPlaceholder('Incidents')
@@ -189,7 +187,7 @@ export class IncidentIOSyncSettingTab extends PluginSettingTab {
 				}));
 
 		new Setting(containerEl)
-			.setName('Historical Days')
+			.setName('Historical days')
 			.setDesc(`Sync incidents from the last N days (0 = only active incidents, max ${MAX_HISTORICAL_DAYS})`)
 			.addText(text => text
 				.setPlaceholder('0')
@@ -204,7 +202,7 @@ export class IncidentIOSyncSettingTab extends PluginSettingTab {
 				}));
 
 		new Setting(containerEl)
-			.setName('Backfill Daily Notes')
+			.setName('Backfill daily notes')
 			.setDesc('Add incident links to older daily notes when syncing historical incidents')
 			.addToggle(toggle => toggle
 				.setValue(this.plugin.settings.updatePreviousDailyNotes)
@@ -214,10 +212,10 @@ export class IncidentIOSyncSettingTab extends PluginSettingTab {
 				}));
 
 		// Daily Note Display
-		containerEl.createEl('h3', { text: 'Daily Note Display' });
+		new Setting(containerEl).setName('Daily note display').setHeading();
 
 		new Setting(containerEl)
-			.setName('Daily Notes Folder')
+			.setName('Daily notes folder')
 			.setDesc('Path to your daily notes folder (leave empty to auto-detect from Periodic Notes or Daily Notes plugin)')
 			.addText(text => text
 				.setPlaceholder('e.g., Notes/Daily Notes')
@@ -228,7 +226,7 @@ export class IncidentIOSyncSettingTab extends PluginSettingTab {
 				}));
 
 		new Setting(containerEl)
-			.setName('Section Header')
+			.setName('Section header')
 			.setDesc('The markdown header to use for the incidents section (must start with #)')
 			.addText(text => text
 				.setPlaceholder('## Incidents')
@@ -246,7 +244,7 @@ export class IncidentIOSyncSettingTab extends PluginSettingTab {
 				}));
 
 		new Setting(containerEl)
-			.setName('Show On-Call Status')
+			.setName('Show on-call status')
 			.setDesc('Include on-call schedule information')
 			.addToggle(toggle => toggle
 				.setValue(this.plugin.settings.showOnCall)
@@ -256,7 +254,7 @@ export class IncidentIOSyncSettingTab extends PluginSettingTab {
 				}));
 
 		new Setting(containerEl)
-			.setName('Show Incidents')
+			.setName('Show incidents')
 			.setDesc('Include active incidents in daily notes')
 			.addToggle(toggle => toggle
 				.setValue(this.plugin.settings.showIncidents)
@@ -266,7 +264,7 @@ export class IncidentIOSyncSettingTab extends PluginSettingTab {
 				}));
 
 		new Setting(containerEl)
-			.setName('Omit Empty Sections')
+			.setName('Omit empty sections')
 			.setDesc('Hide sections when there\'s nothing to report')
 			.addToggle(toggle => toggle
 				.setValue(this.plugin.settings.omitEmptySections)
@@ -276,10 +274,10 @@ export class IncidentIOSyncSettingTab extends PluginSettingTab {
 				}));
 
 		// Auto-sync
-		containerEl.createEl('h3', { text: 'Auto-Sync' });
+		new Setting(containerEl).setName('Auto-sync').setHeading();
 
 		new Setting(containerEl)
-			.setName('Enable Auto-Sync')
+			.setName('Enable auto-sync')
 			.setDesc('Automatically sync at regular intervals')
 			.addToggle(toggle => toggle
 				.setValue(this.plugin.settings.autoSyncEnabled)
@@ -289,7 +287,7 @@ export class IncidentIOSyncSettingTab extends PluginSettingTab {
 				}));
 
 		new Setting(containerEl)
-			.setName('Sync Frequency')
+			.setName('Sync frequency')
 			.setDesc('How often to automatically sync')
 			.addDropdown(dropdown => dropdown
 				.addOption('60000', '1 minute')
@@ -304,13 +302,13 @@ export class IncidentIOSyncSettingTab extends PluginSettingTab {
 				}));
 
 		// Sync Now - single prominent button
-		containerEl.createEl('h3', { text: 'Sync' });
+		new Setting(containerEl).setName('Sync').setHeading();
 
 		new Setting(containerEl)
-			.setName('Sync Everything')
+			.setName('Sync everything')
 			.setDesc('Fetch incidents, create/update note files, and update daily notes')
 			.addButton(button => button
-				.setButtonText('Sync Now')
+				.setButtonText('Sync now')
 				.setCta()
 				.onClick(async () => {
 					button.setButtonText('Syncing...');
@@ -318,12 +316,12 @@ export class IncidentIOSyncSettingTab extends PluginSettingTab {
 
 					await this.plugin.syncToDaily();
 
-					button.setButtonText('Sync Now');
+					button.setButtonText('Sync now');
 					button.setDisabled(false);
 				}));
 
 		new Setting(containerEl)
-			.setName('Clear Incidents Section')
+			.setName('Clear incidents section')
 			.setDesc('Remove the incidents section from today\'s daily note')
 			.addButton(button => button
 				.setButtonText('Clear')

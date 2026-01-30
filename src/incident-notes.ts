@@ -28,7 +28,11 @@ export class IncidentNoteManager {
 
 		try {
 			await this.app.vault.createFolder(folderPath);
-			return this.app.vault.getAbstractFileByPath(folderPath) as TFolder;
+			const folder = this.app.vault.getAbstractFileByPath(folderPath);
+			if (folder instanceof TFolder) {
+				return folder;
+			}
+			return null;
 		} catch (error) {
 			logger.error('Error creating incidents folder', error);
 			return null;
@@ -81,7 +85,7 @@ export class IncidentNoteManager {
 			return String(value);
 		}
 		// If value contains YAML special chars or has leading/trailing whitespace, quote it
-		if (/[:\#\[\]\{\}\n\r"'|>]/.test(value) || value.trim() !== value) {
+		if (/[:#[\]{}\n\r"'|>]/.test(value) || value.trim() !== value) {
 			return JSON.stringify(value);
 		}
 		return value;

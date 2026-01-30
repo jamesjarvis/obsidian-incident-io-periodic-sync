@@ -9,7 +9,7 @@ export class Logger {
 	}
 
 	info(message: string, ...args: unknown[]): void {
-		console.log(`[${this.prefix}] ${message}`, ...args);
+		console.debug(`[${this.prefix}] ${message}`, ...args);
 	}
 
 	warn(message: string, ...args: unknown[]): void {

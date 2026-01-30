@@ -100,7 +100,7 @@ export default class IncidentIOSyncPlugin extends Plugin {
 
 		// Ribbon icon (shield for incidents)
 		this.ribbonIconEl = this.addRibbonIcon('shield', 'Sync incidents to daily note', () => {
-			this.syncToDaily();
+			void this.syncToDaily();
 		});
 
 		// Commands
@@ -108,7 +108,7 @@ export default class IncidentIOSyncPlugin extends Plugin {
 			id: 'sync-incidents-to-daily',
 			name: 'Sync incidents to daily note',
 			callback: () => {
-				this.syncToDaily();
+				void this.syncToDaily();
 			},
 		});
 
@@ -116,7 +116,7 @@ export default class IncidentIOSyncPlugin extends Plugin {
 			id: 'clear-incidents-section',
 			name: 'Clear incidents section from daily note',
 			callback: () => {
-				this.clearIncidentsSection();
+				void this.clearIncidentsSection();
 			},
 		});
 
@@ -250,13 +250,11 @@ export default class IncidentIOSyncPlugin extends Plugin {
 		this.clearAutoSync();
 
 		if (this.settings.autoSyncEnabled && this.settings.autoSyncFrequency > 0 && this.api) {
-			this.autoSyncInterval = window.setInterval(async () => {
-				try {
-					await this.syncToDaily();
-				} catch (error) {
+			this.autoSyncInterval = window.setInterval(() => {
+				void this.syncToDaily().catch((error: unknown) => {
 					logger.error('Auto-sync failed', error);
 					// Don't show notice for auto-sync failures - just log
-				}
+				});
 			}, this.settings.autoSyncFrequency);
 		}
 	}
