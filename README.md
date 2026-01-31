@@ -82,11 +82,26 @@ Creates individual files like `Incidents/INC-123.md` with:
 | Historical Sync Days | Sync incidents from past N days | 0 |
 | Update Previous Daily Notes | Backfill historical daily notes | false |
 
-## Building from Source
+## Development
+
+### Building from Source
 
 ```bash
 npm install
 npm run build
+```
+
+### Running Tests
+
+```bash
+npm run test        # Run tests once
+npm run test:watch  # Run tests in watch mode
+```
+
+### Running Lints
+
+```bash
+npm run lint
 ```
 
 ## License

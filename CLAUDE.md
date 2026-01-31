@@ -7,6 +7,29 @@ npm install
 npm run build
 ```
 
+## Testing
+
+Tests run automatically via Claude Code hooks before commits.
+
+```bash
+npm run test        # Run unit tests
+npm run test:watch  # Run tests in watch mode
+npm run lint        # Run linter
+```
+
+### After Editing TypeScript Files
+
+Tests and lints run automatically via hooks. To run manually:
+
+```bash
+npm run lint && npm run test
+```
+
+### Before Committing
+
+Build, lint, and tests run automatically via pre-commit hook.
+If tests fail, fix issues before committing.
+
 ## Release Process
 
 ### 1. Bump version

@@ -2,6 +2,49 @@ import { App, TFile, TFolder, normalizePath } from 'obsidian';
 import { IncidentIOSyncSettings, FullIncident, IncidentUpdate, FollowUp, IncidentAction, IncidentAttachment } from './types';
 import { logger } from './logger';
 
+// Exported pure functions for testing
+
+/**
+ * Safely encode a value for YAML frontmatter.
+ * Values containing YAML special characters are JSON-encoded (quoted).
+ */
+export function yamlSafeValue(value: string | number | undefined): string {
+	if (value === undefined) {
+		return '';
+	}
+	if (typeof value === 'number') {
+		return String(value);
+	}
+	// If value contains YAML special chars or has leading/trailing whitespace, quote it
+	if (/[:#[\]{}\n\r"'|>]/.test(value) || value.trim() !== value) {
+		return JSON.stringify(value);
+	}
+	return value;
+}
+
+/** Format date as YYYY-MM-DD HH:MM */
+export function formatDate(date: Date): string {
+	const year = date.getFullYear();
+	const month = String(date.getMonth() + 1).padStart(2, '0');
+	const day = String(date.getDate()).padStart(2, '0');
+	const hours = String(date.getHours()).padStart(2, '0');
+	const minutes = String(date.getMinutes()).padStart(2, '0');
+	return `${year}-${month}-${day} ${hours}:${minutes}`;
+}
+
+/** Format duration in minutes as Xh Ym */
+export function formatDuration(minutes: number): string {
+	if (minutes < 60) {
+		return `${minutes}m`;
+	}
+	const hours = Math.floor(minutes / 60);
+	const mins = minutes % 60;
+	if (mins === 0) {
+		return `${hours}h`;
+	}
+	return `${hours}h ${mins}m`;
+}
+
 export class IncidentNoteManager {
 	private app: App;
 	private settings: IncidentIOSyncSettings;
@@ -73,22 +116,9 @@ export class IncidentNoteManager {
 		return normalizePath(`${this.settings.incidentNotesFolder}/${filename}`);
 	}
 
-	/**
-	 * Safely encode a value for YAML frontmatter.
-	 * Values containing YAML special characters are JSON-encoded (quoted).
-	 */
+	/** Delegates to exported yamlSafeValue function */
 	private yamlSafeValue(value: string | number | undefined): string {
-		if (value === undefined) {
-			return '';
-		}
-		if (typeof value === 'number') {
-			return String(value);
-		}
-		// If value contains YAML special chars or has leading/trailing whitespace, quote it
-		if (/[:#[\]{}\n\r"'|>]/.test(value) || value.trim() !== value) {
-			return JSON.stringify(value);
-		}
-		return value;
+		return yamlSafeValue(value);
 	}
 
 	formatFrontmatter(incident: FullIncident): string {
@@ -297,25 +327,14 @@ export class IncidentNoteManager {
 		lines.push(`- [${title}](${attachment.resource.permalink})`);
 	}
 
+	/** Delegates to exported formatDate function */
 	private formatDate(date: Date): string {
-		const year = date.getFullYear();
-		const month = String(date.getMonth() + 1).padStart(2, '0');
-		const day = String(date.getDate()).padStart(2, '0');
-		const hours = String(date.getHours()).padStart(2, '0');
-		const minutes = String(date.getMinutes()).padStart(2, '0');
-		return `${year}-${month}-${day} ${hours}:${minutes}`;
+		return formatDate(date);
 	}
 
+	/** Delegates to exported formatDuration function */
 	private formatDuration(minutes: number): string {
-		if (minutes < 60) {
-			return `${minutes}m`;
-		}
-		const hours = Math.floor(minutes / 60);
-		const mins = minutes % 60;
-		if (mins === 0) {
-			return `${hours}h`;
-		}
-		return `${hours}h ${mins}m`;
+		return formatDuration(minutes);
 	}
 
 	async createOrUpdateIncidentNote(incident: FullIncident): Promise<TFile | null> {

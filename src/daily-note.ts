@@ -2,6 +2,34 @@ import { App, TFile, normalizePath, Plugin } from 'obsidian';
 import { SyncResult, IncidentIOSyncSettings, FullIncident } from './types';
 import { logger } from './logger';
 
+// Exported pure functions for testing
+
+/**
+ * Filter incidents that were active on a specific date.
+ * An incident was active if:
+ * - It was created before or on that date, AND
+ * - It was still open on that date (not closed, or closed on/after that date)
+ */
+export function filterIncidentsForDate(incidents: FullIncident[], date: Date): FullIncident[] {
+	const dateStart = new Date(date);
+	dateStart.setHours(0, 0, 0, 0);
+	const dateEnd = new Date(date);
+	dateEnd.setHours(23, 59, 59, 999);
+
+	return incidents.filter(inc => {
+		const createdAt = new Date(inc.created_at);
+		const closedAt = inc.closed_at ? new Date(inc.closed_at) : null;
+
+		// Incident was created before or on this date (created_at <= end_of_day)
+		const createdBeforeOrOn = createdAt <= dateEnd;
+
+		// Incident was still open on this date (no close date, or closed at >= start_of_day)
+		const stillOpenOnDate = !closedAt || closedAt >= dateStart;
+
+		return createdBeforeOrOn && stillOpenOnDate;
+	});
+}
+
 // Type declarations for internal Obsidian plugin APIs
 interface PeriodicNotesSettings {
 	daily?: {
@@ -161,25 +189,9 @@ export class DailyNoteManager {
 		return `- [${incident.reference}](${incident.url}): "${incident.name}" (${incident.status})`;
 	}
 
-	// Filter incidents that were active on a specific date
+	/** Filter incidents for a date - delegates to exported function */
 	filterIncidentsForDate(incidents: FullIncident[], date: Date): FullIncident[] {
-		const dateStart = new Date(date);
-		dateStart.setHours(0, 0, 0, 0);
-		const dateEnd = new Date(date);
-		dateEnd.setHours(23, 59, 59, 999);
-
-		return incidents.filter(inc => {
-			const createdAt = new Date(inc.created_at);
-			const closedAt = inc.closed_at ? new Date(inc.closed_at) : null;
-
-			// Incident was created before or on this date (created_at <= end_of_day)
-			const createdBeforeOrOn = createdAt <= dateEnd;
-
-			// Incident was still open on this date (no close date, or closed at >= start_of_day)
-			const stillOpenOnDate = !closedAt || closedAt >= dateStart;
-
-			return createdBeforeOrOn && stillOpenOnDate;
-		});
+		return filterIncidentsForDate(incidents, date);
 	}
 
 	// Format sync result for a specific date
